@@ -16,10 +16,10 @@ trait HasGetterSetter
         $property = lcfirst(substr($name, 3));
         switch ($method) {
             case 'get':
-                return $this->{$property} ?? null;
+                return $this->resource->{$property} ?? null;
             case 'set':
-                if ($this->{$property}) {
-                    return $this->{$property} = $arguments[0];
+                if ($this->resource->{$property}) {
+                    return $this->resource->{$property} = $arguments[0];
                 }
                 throw new \Exception("Unable to call class method. Public method [{$name}] not found.");
             default:

@@ -13,11 +13,15 @@ class Starship extends JsonResource implements Arrayable
 
     private ?Collection $cargo = null;
 
+    private float $speedComparison = 100;
+
     public function toArray(?Request $request = null)
     {
         return [
             'name'              => $this->name,
             'model'             => $this->model,
+            'speed'             => intval($this->max_atmosphering_speed),
+            'speed_comparison'  => $this->speedComparison,
             'class'             => $this->starship_class,
             'capacity'          => [
                 'crew'       => $this->crew,
@@ -28,7 +32,6 @@ class Starship extends JsonResource implements Arrayable
             'pilots'            => $this->pilots,
             'manufacturer'      => $this->manufacturer,
             'hyperdrive_rating' => floatval($this->hyperdrive_rating),
-            'speed'             => intval($this->max_atmosphering_speed),
         ];
     }
 
@@ -44,5 +47,10 @@ class Starship extends JsonResource implements Arrayable
     public function offloadCargo($index)
     {
         $this->cargo->forget($index);
+    }
+
+    public function compareSpeed(self $fastest)
+    {
+        $this->speedComparison = round(intval($this->max_atmosphering_speed) / intval($fastest->getMax_atmosphering_speed()), 2) * 100;
     }
 }

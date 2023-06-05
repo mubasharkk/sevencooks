@@ -20,4 +20,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 
-Route::resource('starships', StarshipsController::class)->only(['index', 'show']);
+Route::resource('starships', StarshipsController::class)->only(['index']);

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Resources\Starship;
 use App\Services\StarWarsService;
 use Illuminate\Http\Request;
 
@@ -18,19 +19,24 @@ class StarshipsController extends Controller
     {
         $request->validate([
             'page'   => 'integer',
-            'format' => 'in:json,html',
-            'count' => 'integer|min:5|max:36'
+            'format' => 'string|in:json,html',
+            'count'  => 'integer|min:5|max:36'
         ]);
 
         $starShips = $this->service->getStarShips();
 
-//        if ($request->get('format') == 'html') {
-//            return view();
-//        }
-
-        return $starShips->sortByDesc(function ($ship, $item){
-            return $ship->getSpeed();
+        // sort by speed DESC
+        $sorted = $starShips->sortByDesc(function (Starship $ship, $item) {
+            return intval($ship->getMax_atmosphering_speed());
         });
+
+        $fastest = $sorted->first();
+
+        $sorted->map(function (Starship $ship) use ($fastest){
+            $ship->compareSpeed($fastest);
+        });
+
+        return $sorted->values()->all();
     }
 
 

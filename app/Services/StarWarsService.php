@@ -23,6 +23,7 @@ class StarWarsService
     public function getStarShips(): Collection
     {
         // This should be done via config
+        // This API is fetch only the first page, it can be tuned to fetch the complete set of data for all Starships
         $data = $this->getData('https://swapi.dev/api/starships');
 
         $ships = array_map(function ($ship) {
